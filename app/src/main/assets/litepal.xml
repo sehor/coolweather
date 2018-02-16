@@ -8,6 +8,6 @@
         <mapping class="com.example.coolweather.entity.County"/>
 
     </list>
-    
+
 
 </litepal>

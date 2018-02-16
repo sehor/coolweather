@@ -34,17 +34,17 @@ public class City extends DataSupport {
         this.provinceId = provinceId;
     }
 
-    public int getCityId() {
-        return cityId;
+    public int getCityCode() {
+        return cityCode;
     }
 
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
+    public void setCityCode(int cityId) {
+        this.cityCode = cityId;
     }
 
     private String cityName;
     private int provinceId;
-    private int cityId;
+    private int cityCode;
 
 }
 
