@@ -1,11 +1,14 @@
 package com.example.coolweather.gson;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by 彭卓荣 on 2018-02-17.
  */
 
 public class AQI {
 
+    @SerializedName("city")
     private AQICity aqiCity;
 
     public class AQICity {

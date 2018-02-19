@@ -7,10 +7,13 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Forecast {
+    private String date;
+
 
     @SerializedName("tem")
     private Temperature temperature;
-    public class Temperature{
+
+    public class Temperature {
         private String max;
         private String min;
 
@@ -50,5 +53,13 @@ public class Forecast {
 
     public void setMore(Now.More more) {
         this.more = more;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

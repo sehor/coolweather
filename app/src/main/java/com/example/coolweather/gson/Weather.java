@@ -2,6 +2,7 @@ package com.example.coolweather.gson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,12 +12,12 @@ import java.util.List;
 public class Weather {
 
     private String status;
-    private BasicInf basic;
+    private Basic basic;
     private AQI aqi;
     private Now now;
     private Suggestion suggestion;
-    @SerializedName("daily_froecast")
-    private List<Forecast> forecastList;
+    @SerializedName("daily_forecast")
+    private List<Forecast> forecastList=new ArrayList<>();
 
     public String getStatus() {
         return status;
@@ -26,11 +27,11 @@ public class Weather {
         this.status = status;
     }
 
-    public BasicInf getBasic() {
+    public Basic getBasic() {
         return basic;
     }
 
-    public void setBasic(BasicInf basic) {
+    public void setBasic(Basic basic) {
         this.basic = basic;
     }
 

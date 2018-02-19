@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Now {
-    @SerializedName("tem")
+    @SerializedName("temp")
     private String temperature;
 
 
@@ -15,7 +15,7 @@ public class Now {
     private More more;
 
     public class More {
-        @SerializedName("txt")
+        @SerializedName("txt_d")
         private String info;
 
         public String getInfo() {
