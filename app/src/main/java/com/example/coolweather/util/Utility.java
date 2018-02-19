@@ -82,10 +82,11 @@ public class Utility {
                     County county=new County();
 
                     county.setCountyName(jo.getString("name"));
-                    county.setWeatherId(jo.getInt("weather_id"));
+                    county.setWeatherId(jo.getString("weather_id"));
                     county.setCityId(cityId);
                     county.save();
                 }
+                return true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }

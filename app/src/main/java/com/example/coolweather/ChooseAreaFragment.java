@@ -1,11 +1,10 @@
 package com.example.coolweather;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,15 +32,10 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChooseAreaFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
-public class ChooseAreaFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+public class ChooseAreaFragment extends Fragment {
+    private static final String TAG = "ChooseAreaFragment";
+
     private static final int LEVEL_PROVINCE = 0;
     private static final int LEVEL_CITY = 1;
     private static final int LEVEL_COUNTY = 2;
@@ -115,47 +109,14 @@ public class ChooseAreaFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
 
-    private void queryFromService(String adress, final String type) {
+
+
+
+
+
+    private void queryFromService(String address, final String type) {
 
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getActivity());
@@ -163,7 +124,7 @@ public class ChooseAreaFragment extends Fragment {
             progressDialog.setCanceledOnTouchOutside(false);
         }
 
-        HttpUtil.sendOkHttpRequest(adress, new Callback() {
+        HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -186,7 +147,7 @@ public class ChooseAreaFragment extends Fragment {
                 String reponseText = response.body().string();
                 boolean result = false;
 
-                if ("provence".equalsIgnoreCase(type)) {
+                if ("province".equalsIgnoreCase(type)) {
 
                     result = Utility.handleProvinceResponse(reponseText);
 
@@ -209,6 +170,14 @@ public class ChooseAreaFragment extends Fragment {
 
                             if ("province".equalsIgnoreCase(type)) {
 
+                                queryProvinces();
+
+                            }else if("city".equalsIgnoreCase(type)){
+                                Log.d(TAG, "run: "+" recall to queryCities");
+                                queryCities();
+                            }else if("county".equalsIgnoreCase(type)){
+                                Log.d(TAG, "run: "+ "recall to queryCounties");
+                                queryCounties();
                             }
                         }
                     });
@@ -225,10 +194,13 @@ public class ChooseAreaFragment extends Fragment {
         titleText.setText("China");
         backButton.setVisibility(View.GONE);
         List<Province> provinces = DataSupport.findAll(Province.class);
+        provinceList=provinces;
 
         if (provinces.size() > 0) {
+
+            dataList.clear();
             for (Province province : provinces) {
-                dataList.clear();
+
                 dataList.add(province.getProvinceName());
             }
             adapter.notifyDataSetChanged();
@@ -246,6 +218,7 @@ public class ChooseAreaFragment extends Fragment {
         backButton.setVisibility(View.VISIBLE);
         List<City> cities = DataSupport.where("provinceId=?",
                 String.valueOf(selectedProvince.getId())).find(City.class);
+        cityList=cities;
         if (cities.size() > 0) {
             dataList.clear();
             for (City city : cities) {
@@ -267,11 +240,13 @@ public class ChooseAreaFragment extends Fragment {
         backButton.setVisibility(View.VISIBLE);
         List<County> counties = DataSupport.where("cityId=?",
                 String.valueOf(selectedCity.getId())).find(County.class);
+        countyList=counties;
         if (counties.size() > 0) {
             dataList.clear();
             for (County county : counties) {
                 dataList.add(county.getCountyName());
             }
+            Log.d(TAG, "queryCounties: "+dataList.get(0));
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_COUNTY;
